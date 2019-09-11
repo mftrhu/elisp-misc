@@ -109,12 +109,6 @@
             (make-string level ?=)
             text
             (make-string level ?=)
-            (let ((links (org-tg-md--unique-links headline info)))
-              (if (and nil links)
-                (format "%s\n%s"
-                 contents
-                 (org-tg-md--describe-links links info))
-                contents))
             )))
 
 ;;;; Paragraph
