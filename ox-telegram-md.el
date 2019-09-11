@@ -12,7 +12,7 @@
 (require 'ox-md)
 
 ;;; Define the back-end
-(org-export-define-backend 'telegram-md ;'md
+(org-export-define-backend 'telegram-md
   '((template . org-tg-md-template)
     (inner-template . org-tg-md-inner-template)
     (section . org-tg-md-section)
@@ -46,69 +46,6 @@
         (insert s)
         (fill-region (point-min) (point-max))
         (buffer-string)))))
-
-(defun org-tg-md--unique-links (element info)
-  "Return a list of unique link references in ELEMENT.
-ELEMENT is either a headline element or a section element.  INFO
-is a plist used as a communication channel."
-  (let* (seen
-	     (unique-link-p
-	      ;; Return LINK if it wasn't referenced so far, or nil.
-	      ;; Update SEEN links along the way.
-	      (lambda (link)
-	        (let ((footprint
-		           ;; Normalize description in footprints.
-		           (cons (org-element-property :raw-link link)
-			             (let ((contents (org-element-contents link)))
-			               (and contents
-				                (replace-regexp-in-string
-				                 "[ \r\t\n]+" " "
-				                 (org-trim
-				                  (org-element-interpret-data contents))))))))
-	          ;; Ignore LINK if it hasn't been translated already.  It
-	          ;; can happen if it is located in an affiliated keyword
-	          ;; that was ignored.
-	          (when (and (org-string-nw-p
-			              (gethash link (plist-get info :exported-data)))
-			             (not (member footprint seen)))
-		        (push footprint seen) link)))))
-    (org-element-map (if (eq (org-element-type element) 'section)
-			             element
-		               ;; In a headline, only retrieve links in title
-		               ;; and relative section, not in children.
-		               (list (org-element-property :title element)
-			                 (car (org-element-contents element))))
-	    'link unique-link-p info nil 'headline t)))
-
-(defun org-tg-md--collect-links (element info)
-  "Return a list of unique link references in ELEMENT.
-ELEMENT is either a headline element or a section element.  INFO
-is a plist used as a communication channel."
-  (message "collect link called")
-  (let* (seen
-	     (unique-link-p
-	      ;; Return LINK if it wasn't referenced so far, or nil.
-	      ;; Update SEEN links along the way.
-	      (lambda (link)
-            (message "unique-link-p called at %s" link)
-	        (let ((footprint
-		           ;; Normalize description in footprints.
-		           (cons (org-element-property :raw-link link)
-			             (let ((contents (org-element-contents link)))
-			               (and contents
-				                (replace-regexp-in-string
-				                 "[ \r\t\n]+" " "
-				                 (org-trim
-				                  (org-element-interpret-data contents))))))))
-	          ;; Ignore LINK if it hasn't been translated already.  It
-	          ;; can happen if it is located in an affiliated keyword
-	          ;; that was ignored.
-	          (when (and (org-string-nw-p
-			              (gethash link (plist-get info :exported-data)))
-			             (not (member footprint seen)))
-		        (push footprint seen) link)))))
-    (org-element-map element
-	    'link unique-link-p info nil nil t)))
 
 (defun org-tg-md--collect-links (contents info)
   (let ((parsetree (org-element-parse-buffer))
@@ -155,21 +92,10 @@ is a plist used as a communication channel."
          definitions "\n"))))
    ;; References (link targets) section
    (let ((links (org-tg-md--collect-links contents info)))
-     (when nil ;links
-       (concat
-        "\n\n**References**\n"
-        (mapconcat
-         (lambda (link)
-           (when (org-element-contents link)
-             (setq counter (+ 1 counter))
-             (format "[%s] %s\n" counter (org-element-property :raw-link link))))
-         links "")))
      (when links
        (concat
         "\n\n**References**\n"
-        (org-tg-md--describe-links links info)))
-     )
-   ))
+        (org-tg-md--describe-links links info))))))
 
 ;;;; Section
 (defun org-tg-md-section (section contents info)
