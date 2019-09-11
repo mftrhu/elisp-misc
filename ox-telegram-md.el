@@ -105,11 +105,7 @@
 (defun org-tg-md-headline (headline contents info)
   (let* ((level (org-export-get-relative-level headline info))
          (text (org-export-data (org-element-property :title headline) info)))
-    (format "**%s %s %s**\n%s"
-            (make-string level ?=)
-            text
-            (make-string level ?=)
-            )))
+    (format "**%s**\n%s" text)))
 
 ;;;; Paragraph
 (defun org-tg-md-paragraph (paragraph contents _info)
