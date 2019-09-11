@@ -42,7 +42,7 @@
 (defun org-tg-md--unfill-string (s)
   (when (stringp s)
     (with-temp-buffer
-      (let ((fill-column 9999))
+      (let ((fill-column most-positive-fixnum))
         (insert s)
         (fill-region (point-min) (point-max))
         (buffer-string)))))
