@@ -5,6 +5,12 @@
 ;; Author: mftrhu <mftrhu@inventati.org>
 ;; Keywords: org, markdown, telegram
 
+;;; Commentary:
+;;
+;; This library implements - from scratch - a backend for the Org
+;; generic exporter, targeting whatever shitty flavour of Markdown is
+;; available on Telegram.
+
 ;;; Code:
 
 (require 'ox)
@@ -15,6 +21,7 @@
 (org-export-define-backend 'telegram-md
   '((template . org-tg-md-template)
     (inner-template . org-tg-md-inner-template)
+    ;; Structural blocks
     (section . org-tg-md-section)
     (headline . org-tg-md-headline)
     (paragraph . org-tg-md-paragraph)
@@ -36,7 +43,12 @@
     ;; Lists
     (plain-list . org-tg-md-plain-list)
     (item . org-tg-md-item)
-    ))
+    ;; Quote block
+    (quote-block . org-tg-md-quote-block)
+    ;; Export blocks & snippets (e.g. @@telegram-md:...@@)
+    (export-block . org-tg-md-export-block)
+    (export-snippet . org-tg-md-export-snippet))
+  :filters-alist '((:filter-final-output . org-tg-md-final-function)))
 
 ;;; Internal functions
 (defun org-tg-md--unfill-string (s)
@@ -210,18 +222,54 @@ a communication channel."
 	        (and contents
 		         (org-trim (replace-regexp-in-string "^" "    " contents))))))
 
+;;;; Quote block
+(defun org-tg-md-quote-block (_quote-block contents _info)
+  (replace-regexp-in-string
+   "^\\(.+\\)$" "> \\&"
+   (replace-regexp-in-string "\n\\'" "" contents)))
+
+;;;; Export blocks and snippets
+(defun org-tg-md-export-block (export-block _contents _info)
+  (when (string= (org-element-property :type export-block) "TELEGRAM")
+    (org-element-property :value export-block)))
+
+(defun org-tg-md-export-snippet (export-snippet _contents _info)
+  (when (eq (org-export-snippet-backend export-snippet) 'telegram-md)
+    (org-element-property :value export-snippet)))
+
+;;; Filter functions
+(defun org-tg-md-final-function (contents _backend info)
+  "Remove superfluous newlines from the final output."
+  (with-temp-buffer
+    (insert contents)
+    (goto-char (point-min))
+    (while (re-search-forward "\\(^\\s-*$\\)\n" nil t)
+      (replace-match "\n")
+      (forward-char 1))
+    (buffer-substring-no-properties (point-min) (point-max))))
+
 ;;; End-user functions
 
+;;;###autoload
 (defun org-telegram-md-export-as-md
     (&optional async subtreep visible-only body-only ext-plist)
   (interactive)
   (org-export-to-buffer 'telegram-md "*Org Telegram Markdown Export*"
     async subtreep visible-only body-only ext-plist (lambda () (text-mode))))
 
+;;;###autoload
+(defun org-telegram-md-export-to-md
+    (&optional async subtreep visible-only body-only ext-plist)
+  (interactive)
+    (let ((file (org-export-output-file-name ".tmd" subtreep)))
+      (org-export-to-file 'telegram-md file
+        async subtreep visible-only body-only ext-plist)))
+
 (provide 'ox-telegram-md)
 
 ;; Local variables:
-;; outshine-mode: t
+;; coding: utf-8
+;; eval: (outshine-mode 1)
 ;; End:
 
 ;;; ox-telegram-md.el ends here
