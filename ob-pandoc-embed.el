@@ -16,7 +16,7 @@
 ;; source is htmlized and embedded inside of a `<details>' tag for
 ;; ease of copy-paste.
 
-;;; Usage:
+;;;; Usage:
 ;; Use `pandoc' or `pandoc-embed' as source in org code blocks.
 ;; Without specifying a language, they are treated as markdown.
 ;;
@@ -32,6 +32,21 @@
 ;; will be exported to org without any issues, but its source won't be
 ;; colorized as Emacs/Org does not understand `markdown_strict' as a
 ;; language.
+
+;;; License:
+
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Code:
 
@@ -115,5 +130,8 @@ This function is called by `org-babel-execute-src-block'."
      "\n#+END_SRC\n"
      "#+HTML: </details>")))
 
+;;; Footer
+
 (provide 'ob-pandoc-embed)
+
 ;;; ob-pandoc-embed.el ends here

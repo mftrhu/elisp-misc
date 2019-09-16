@@ -3,6 +3,7 @@
 ;; Copyright (C) 2018 mftrhu
 ;; Author: mftrhu <mftrhu@inventati.org>
 ;; Created: 2018-10-22
+;; Updated: 2018-11-02
 ;; Version: 0.2
 ;; Keywords: org-mode
 
@@ -16,7 +17,7 @@
 ;;
 ;; It has the usual org-link limitations.
 
-;;; References:
+;;;; References:
 ;; - "How to strip decorations (text properties) from a string?" on
 ;;   Emacs StackExchange, <https://emacs.stackexchange.com/a/31226> -
 ;; - "Org Element API" on Worg,
@@ -24,7 +25,7 @@
 ;; - "New link features in org 9" on The Kitchin Research Group,
 ;;   <http://kitchingroup.cheme.cmu.edu/blog/2016/11/04/New-link-features-in-org-9/>
 
-;;; Usage:
+;;;; Usage:
 ;; `abbr' links can be used either inline, like this:
 ;;
 ;;     [[abbr:HyperText Transfer Protocol][HTTP]]
@@ -33,6 +34,21 @@
 ;;
 ;;     #+LINK: HTTP abbr:HyperText Transfer Protocol
 ;;     [[HTTP]]
+
+;;; License:
+
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Code:
 
@@ -121,5 +137,8 @@
    'org-abbr-follow
    'org-abbr-export))
 
+;;; Footer
+
 (provide 'org-abbr)
+
 ;;; org-abbr.el ends here
