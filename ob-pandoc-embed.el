@@ -44,7 +44,7 @@
            " -o " (org-babel-process-file-name out-file)
            ) ""))
 
-;; * Pandoc
+;;; Pandoc
 (defvar org-babel-default-header-args:pandoc
   '((:results . "raw")
     (:exports . "results")))
@@ -76,7 +76,7 @@ This function is called by `org-babel-execute-src-block'."
        (buffer-string))
      "\n")))
 
-;; * Pandoc-embed
+;;; Pandoc-embed
 (defvar org-babel-default-header-args:pandoc-embed
   '((:results . "raw")
     (:exports . "results")))
@@ -116,4 +116,4 @@ This function is called by `org-babel-execute-src-block'."
      "#+HTML: </details>")))
 
 (provide 'ob-pandoc-embed)
-;; ob-pandoc-embed.el ends here
+;;; ob-pandoc-embed.el ends here
