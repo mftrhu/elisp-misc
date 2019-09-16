@@ -1,0 +1,15 @@
+#+Title: Readme
+#+Author: mftrhu
+
+Miscellaneous elisp code, mostly cobbled together to extend org-mode, imported from RCS.
+
+* ~org-abbr~
+~org-abbr~ is a trivial piece of code, which creates a new org-mode link type to add support for abbreviations.
+
+/E.g./, =[[abbr:HyperText Transfer Protocol][HTTP]]= would result in only HTTP being displayed, in a new face, with "HyperText Transfer Protocol" appearing on hover.
+
+* ~ob-pandoc-embed~
+~ob-pandoc-embed~ defines a Babel exporter for ~pandoc~ "code blocks", allowing any of the markup languages supported by ~pandoc~ to be converted to Org-mode on the fly.
+
+* ~ox-telegram-md~
+~ox-telegram-md~ implements - from scratch - a backend for the org generic exporter, outputting Telegram-flavoured "Markdown".
